@@ -15,7 +15,7 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_props_to_html_2(self):
         node = HTMLNode("a", "Google", None, {"href": "https://www.google.com", "onClick": True, "id": "link"})
-        self.assertEqual(node.props_to_html(), 'href="https://www.google.com" onClick="True" id="link"')
+        self.assertEqual(node.props_to_html(), ' href="https://www.google.com" onClick="True" id="link"')
 
     def test_to_html(self):
         node = HTMLNode()

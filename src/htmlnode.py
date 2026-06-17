@@ -12,7 +12,7 @@ class HTMLNode:
         if self.props == None or len(self.props) == 0:
             return ""
 
-        total = ""
+        total = " "
         first_iteration = True
         for key in self.props.keys():
             if not first_iteration:
