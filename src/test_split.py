@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from inline import split_nodes_delimiter
+from split import split_nodes_delimiter
 
 class TestSplitNodesDelimiter(unittest.TestCase):
     def test_center(self):
