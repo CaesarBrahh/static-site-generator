@@ -1,5 +1,6 @@
 from enum import Enum
 from leafnode import LeafNode
+from split import split_nodes_link, split_nodes_image, split_nodes_delimiter
 
 class TextType(Enum):
     TEXT = "text"
@@ -41,3 +42,21 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
             return LeafNode("img", text_node.text, text_node.url)
         case _:
             raise ValueError("Text node doesn't exist")
+
+def text_to_textnodes(text):
+    # links
+    nodes = split_nodes_link([text])
+
+    # images
+    nodes = split_nodes_image(nodes)
+
+    # italic text
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+
+    # bold text
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+
+    # code text
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+
+    return nodes
