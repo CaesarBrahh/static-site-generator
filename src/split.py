@@ -1,6 +1,30 @@
 from textnode import TextNode, TextType
 from extract import extract_markdown_images, extract_markdown_links
 
+def text_to_textnodes(text):
+    # convert text to a singular TextType.TEXT node
+    node = TextNode(
+        text,
+        TextType.TEXT
+    )
+
+    # links
+    nodes = split_nodes_link([node])
+
+    # images
+    nodes = split_nodes_image(nodes)
+
+    # italic text
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+
+    # bold text
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+
+    # code text
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+
+    return nodes
+
 # inputs: a list of old node, a delimiter, text type; outputs: a list of new nodes
 def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
     new_list = []

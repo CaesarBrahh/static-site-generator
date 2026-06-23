@@ -1,6 +1,72 @@
 import unittest
 from textnode import TextNode, TextType
-from split import split_nodes_delimiter,split_nodes_link, split_nodes_image
+from split import split_nodes_delimiter,split_nodes_link, split_nodes_image, text_to_textnodes
+
+class TextToTextNodes(unittest.TestCase):
+    def test_all(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/obiwan.jpeg) and a [link](https://www.google.com)"
+        nodes = text_to_textnodes(text)
+        self.assertListEqual(
+            nodes,
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/obiwan.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://www.google.com")
+            ]
+        )
+
+    def test_plain_text(self):
+        nodes = text_to_textnodes("just plain text")
+        self.assertListEqual(
+            nodes, 
+            [
+                TextNode("just plain text", TextType.TEXT)
+            ]
+        )
+
+    def test_empty_string(self):
+        nodes = text_to_textnodes("")
+        self.assertListEqual(
+            nodes,
+            []
+        )
+
+    def test_multiple_same_type(self):
+        nodes = text_to_textnodes("This is **bold** and **also bold**")
+        self.assertListEqual(
+            nodes,
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("bold", TextType.BOLD),
+                TextNode(" and ", TextType.TEXT),
+                TextNode("also bold", TextType.BOLD)
+            ]
+        )
+
+    def test_link_and_image_order(self):
+        nodes = text_to_textnodes(
+            "Image ![cat](cat.png) and then link [site](https://example.com)"
+        )
+        self.assertListEqual(
+            nodes,
+            [
+                TextNode("Image ", TextType.TEXT),
+                TextNode("cat", TextType.IMAGE, "cat.png"),
+                TextNode(" and then link ", TextType.TEXT),
+                TextNode("site", TextType.LINK, "https://example.com")
+            ]
+        )
+
+    def test_unmatched_delimiter_raises(self):
+        with self.assertRaises(ValueError):
+            text_to_textnodes("This has **unclosed bold")
 
 class TestSplitNodesLink(unittest.TestCase):
     def test_base(self):
