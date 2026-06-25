@@ -60,17 +60,17 @@ class TestTextNodeToHTMLNode(unittest.TestCase):
         self.assertEqual(html_node.props, None)
 
     def test_link(self):
-        node = TextNode("Google", TextType.LINK, {"href": "https://www.google.com"})
+        node = TextNode("Google", TextType.LINK, "https://www.google.com")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "a")
         self.assertEqual(html_node.value, "Google")
         self.assertEqual(html_node.props, {"href": "https://www.google.com"})
 
     def test_image(self):
-        node = TextNode(None, TextType.IMAGE, {"src": "https://example.com/image.png", "alt": "Alt Text"})
+        node = TextNode("Alt Text", TextType.IMAGE, "https://example.com/image.png")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "img")
-        self.assertEqual(html_node.value, None)
+        self.assertEqual(html_node.value, "Alt Text")
         self.assertEqual(html_node.props, {"src": "https://example.com/image.png", "alt": "Alt Text"})
 
     def test_invalid(self):
