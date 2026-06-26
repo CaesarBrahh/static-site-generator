@@ -6,7 +6,7 @@ def main():
 def static_to_public():
     # define paths to source and destination directories
     src_dir = "static"
-    dst_dir = "public"
+    dst_dir = "docs"
 
     # delete all contents of destination directory
     delete_contents(dst_dir)
