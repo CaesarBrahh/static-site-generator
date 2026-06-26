@@ -105,8 +105,11 @@ def markdown_to_html_node(markdown: str) -> ParentNode:
             split_block = block.split("\n")
             for i in range(len(split_block)):
                 split_block[i] = split_block[i][1:]
-                if split_block[i][0] == " ":
-                    split_block[i] = split_block[i][1:]
+                try:
+                    if split_block[i][0] == " ":
+                        split_block[i] = split_block[i][1:]
+                except IndexError:
+                    pass
             quote_block = " ".join(split_block)
             leaf_nodes = text_to_children(quote_block)
         else:
